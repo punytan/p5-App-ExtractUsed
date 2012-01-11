@@ -2,7 +2,7 @@ use inc::Module::Install;
 name 'App-ExtractUsed';
 all_from 'lib/App/ExtractUsed.pm';
 
-# requires '';
+requires 'version';
 requires 'Module::Extract::Use';
 
 install_script 'bin/extractused';

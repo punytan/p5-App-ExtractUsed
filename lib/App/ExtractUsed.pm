@@ -72,21 +72,73 @@ __END__
 
 =head1 NAME
 
-App::ExtractUsed -
+App::ExtractUsed - Extracts used modules from your project
 
 =head1 SYNOPSIS
 
-  use App::ExtractUsed;
+    use App::ExtractUsed;
+    my $extract = App::ExtractUsed->new;
+
+    for my $module ($extract->from_dir_under('lib')) {
+        print qq{requires '$module';\n};
+    }
+
+    for my $module ($extract->from_file('lib/App/ExtractUsed.pm')) {
+        print qq{requires '$module';\n};
+    }
+
 
 =head1 DESCRIPTION
 
-App::ExtractUsed is
+App::ExtractUsed is a CLI tool to extract used modules (without core modules) from your project.
+
+See also L<bin/extractused>
+
+=head1 METHODS
+
+=head2 C<new(%options)>
+
+    use version;
+    my $extract = App::ExtractUsed->new(
+        skip_namespace   => ['MyProject'],
+        min_perl_version => version->new('5.8.1'),
+    );
+
+=head3 C<%options>
+
+=over
+
+=item * C<skip_namespace>
+
+An arrayref of namespaces that should not be included in the dependent list.
+
+=item * C<min_perl_version>
+
+Specify the minimun version of perl.
+This parameter is used to decide the core modules.
+Default value is C<$^V> (current running version).
+
+=back
+
+=head2 C<from_dir_under($directory)>
+
+This method returns array of used modules (without core modules) from specified directory.
+
+=head2 C<from_file($path)>
+
+This method returns array of used modules (without core modules) from specified file.
 
 =head1 AUTHOR
 
 punytan E<lt>punytan@gmail.comE<gt>
 
 =head1 SEE ALSO
+
+L<bin/extractused>
+
+L<Module::Extract::Use>
+
+L<Module::CoreList>
 
 =head1 LICENSE
 

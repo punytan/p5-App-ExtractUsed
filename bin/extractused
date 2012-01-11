@@ -1,16 +1,111 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use version;
+use Pod::Usage;
+use Getopt::Long;
 use App::ExtractUsed;
 
-my $extract = App::ExtractUsed->new;
+my $args = {
+    skip => [],
+    dir  => [],
+    file => [],
+    perl => '',
+    help => 0,
+    version => 0,
+};
 
-for my $module ($extract->from_dir_under('lib')) {
-    print qq{requires '$module';\n};
+GetOptions($args, qw< skip=s% perl=s dir=s% file=s% help version >);
+
+if ($args->{help}) {
+    pod2usage(1);
+} elsif ($args->{version}) {
+    print "extractused (App::ExtractUsed) version $App::ExtractUsed::VERSION\n";
+    exit;
 }
 
-for my $module ($extract->from_dir_under('t')) {
-    print qq{test_requires '$module';\n};
+my $version = $args->{perl}
+    ? version->new($args->{perl})
+    : $^V ;
+
+unless (scalar @{$args->{dir}}, @{$args->{file}}) {
+    push @{$args->{dir}}, 'lib', 't';
+
+    # TODO: get the namespace of this project
+    # i.e. push @{$args->{skip}}, "Detected::Namespace";
+}
+
+my $extract = App::ExtractUsed->new(
+    skip_namespace   => $args->{skip},
+    min_perl_version => $version,
+);
+
+for my $dir (@{ $args->{dir} }) {
+    my $sub = $dir =~ m<^t/?>
+        ? "test_requires" : "requires";
+
+    for my $module ($extract->from_dir_under($dir)) {
+        print qq{$sub '$module';\n};
+    }
+}
+
+for my $file (@{ $args->{file} }) {
+    my $sub = $file =~ m<^t/?>
+        ? "test_requires" : "requires";
+
+    for my $module ($extract->from_file($file)) {
+        print qq{$sub '$module';\n};
+    }
 }
 
 __END__
+
+=head1 NAME
+
+extractused - CLI tool to extract used modules from your project.
+
+=head1 SYNOPSIS
+
+    $ extractused # is equivalent to "--dir lib --dir t"
+    $ extractused --skip YourProject
+    $ extractused --file lib/YourProject.pm --skip YourProject
+
+    $ extractused --help
+    $ extractused --version
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--perl>
+
+the minimun perl version
+
+=item B<--skip>
+
+the namespace that should not be included
+
+=item B<--dir>
+
+directory
+
+=item B<--file>
+
+path to the file
+
+=item B<--help>
+
+brief help message
+
+=item B<--version>
+
+print version
+
+=back
+
+=head1 DESCRIPTION
+
+B<This program> will read the given input file(s) and do something
+useful with the contents thereof.
+
+=cut

@@ -19,7 +19,7 @@ sub new {
 sub from_file {
     my ($self, $file) = @_;
     my @modules = $self->{extractor}->get_modules($file);
-    return sort $self->grep_non_core(@modules);
+    return (sort $self->grep_non_core(@modules));
 }
 
 sub from_dir_under {
@@ -39,7 +39,7 @@ sub from_dir_under {
         no_chdir => 1,
     }, $dir);
 
-    return sort keys %modules;
+    return (sort keys %modules);
 }
 
 sub grep_non_core {

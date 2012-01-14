@@ -5,6 +5,7 @@ use version;
 use Pod::Usage;
 use Getopt::Long;
 use App::ExtractUsed;
+use App::ExtractUsed::Script;
 
 my $args = {
     skip => [],
@@ -24,39 +25,8 @@ if ($args->{help}) {
     exit;
 }
 
-my $version = $args->{perl}
-    ? version->new($args->{perl})
-    : $^V ;
-
-unless (scalar @{$args->{dir}}, @{$args->{file}}) {
-    push @{$args->{dir}}, 'lib', 't';
-
-    # TODO: get the namespace of this project
-    # i.e. push @{$args->{skip}}, "Detected::Namespace";
-}
-
-my $extract = App::ExtractUsed->new(
-    skip_namespace   => $args->{skip},
-    min_perl_version => $version,
-);
-
-for my $dir (@{ $args->{dir} }) {
-    my $sub = $dir =~ m<^t/?>
-        ? "test_requires" : "requires";
-
-    for my $module ($extract->from_dir_under($dir)) {
-        print qq{$sub '$module';\n};
-    }
-}
-
-for my $file (@{ $args->{file} }) {
-    my $sub = $file =~ m<^t/?>
-        ? "test_requires" : "requires";
-
-    for my $module ($extract->from_file($file)) {
-        print qq{$sub '$module';\n};
-    }
-}
+my $script = App::ExtractUsed::Script->new($args);
+$script->run;
 
 __END__
 

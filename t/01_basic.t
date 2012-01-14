@@ -14,7 +14,7 @@ isa_ok $extract, 'App::ExtractUsed';
 }
 
 {
-    my $expected = join "|", sort qw(Module::Extract::Use);
+    my $expected = join "|", sort qw(Module::Extract::Use App::ExtractUsed);
     my $got = join "|", sort $extract->from_dir_under('lib');
 
     ok $expected eq $got, "from_dir_under";

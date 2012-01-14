@@ -3,6 +3,7 @@ name 'App-ExtractUsed';
 all_from 'lib/App/ExtractUsed.pm';
 
 requires 'version';
+requires 'Module::CoreList';
 requires 'Module::Extract::Use';
 
 install_script 'bin/extractused';

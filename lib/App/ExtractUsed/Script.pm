@@ -20,6 +20,7 @@ sub new {
     bless {
         dir  => $args->{dir},
         file => $args->{file},
+        list => $args->{list},
         extract => $extract,
     }, $class;
 }
@@ -49,7 +50,7 @@ sub run {
             ? "test_requires" : "requires";
 
         for my $module ($self->{extract}->from_file($file)) {
-            push @lines, qq{$sub '$module';};
+            push @lines, $self->{list} ? $module : qq{$sub '$module';};
         }
     }
 

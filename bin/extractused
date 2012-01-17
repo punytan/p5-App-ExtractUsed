@@ -12,11 +12,12 @@ my $args = {
     dir  => [],
     file => [],
     perl => '',
+    list => 0,
     help => 0,
     version => 0,
 };
 
-GetOptions($args, qw< skip=s% perl=s dir=s% file=s% help version >);
+GetOptions($args, qw< skip=s% perl=s dir=s% file=s% list help version >);
 
 if ($args->{help}) {
     pod2usage(1);
@@ -40,6 +41,8 @@ extractused - CLI tool to extract used modules from your project.
     $ extractused --skip YourProject
     $ extractused --file lib/YourProject.pm --skip YourProject
 
+    $ extractused --file write-once.pl --list | cpanm
+
     $ extractused --help
     $ extractused --version
 
@@ -62,6 +65,10 @@ directory
 =item B<--file>
 
 path to the file
+
+=item B<--list>
+
+Output format for cpanm (or other command)
 
 =item B<--help>
 

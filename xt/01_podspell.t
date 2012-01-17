@@ -9,3 +9,5 @@ __DATA__
 punytan
 punytan@gmail.com
 App::ExtractUsed
+CLI
+namespaces

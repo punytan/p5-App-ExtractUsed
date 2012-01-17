@@ -114,7 +114,7 @@ An arrayref of namespaces that should not be included in the dependent list.
 
 =item * C<min_perl_version>
 
-Specify the minimun version of perl.
+Specify the minimum version of perl.
 This parameter is used to decide the core modules.
 Default value is C<$^V> (current running version).
 

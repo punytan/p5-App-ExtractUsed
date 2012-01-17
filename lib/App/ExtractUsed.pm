@@ -64,7 +64,7 @@ sub grep_non_core {
 
 sub skip {
     my ($self, $module) = @_;
-    grep { $module =~ /^$_/ } @{ $self->{skip_namespace} };
+    grep { $module =~ /^$_/ } @{ $self->{skip_namespace} }, "t::";
 }
 
 1;

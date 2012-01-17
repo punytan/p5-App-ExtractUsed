@@ -49,7 +49,7 @@ extractused - CLI tool to extract used modules from your project.
 
 =item B<--perl>
 
-the minimun perl version
+the minimum perl version
 
 =item B<--skip>
 

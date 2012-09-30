@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use version;
 use App::ExtractUsed;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub new {
     my ($class, $args) = @_;

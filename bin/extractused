@@ -37,14 +37,41 @@ extractused - CLI tool to extract used modules from your project.
 
 =head1 SYNOPSIS
 
-    $ extractused # is equivalent to "--dir lib --dir t"
-    $ extractused --skip YourProject
-    $ extractused --file lib/YourProject.pm --skip YourProject
+    # in your project directory,
+
+    # `extractused` is equivalent to `extractused --dir lib --dir t`
+
+    $ extractused
+    requires 'App::ExtractUsed';
+    requires 'Module::Extract::Use';
+    test_requires 'App::ExtractUsed';
+    test_requires 'JSON::PP';
+
+    $ extractused --skip App::ExtractUsed
+    requires 'Module::Extract::Use';
+    test_requires 'JSON::PP';
+
+    $ extractused --file lib/App/ExtractUsed.pm --skip App::ExtractUsed
+    requires 'Module::Extract::Use';
+
+    $ extractused --file bin/extractused --list
+    App::ExtractUsed
+    App::ExtractUsed::Script
 
     $ extractused --file write-once.pl --list | cpanm
 
     $ extractused --help
     $ extractused --version
+
+=head1 DESCRIPTION
+
+B<extractused> will read the given input file(s) and extract C<use>ed and/or C<require>d modules
+
+The final task before make dist is writing deps into C<Makefile.PL>.
+But extracting used modules from your project is tedious and painstaking
+since we have to recognize what modules are core/non-core modules.
+
+This script helps you to generate C<Makefile.PL>.
 
 =head1 OPTIONS
 
@@ -60,15 +87,16 @@ the namespace that should not be included
 
 =item B<--dir>
 
-directory
+the directory to traverse
 
 =item B<--file>
 
-path to the file
+specify the path to a file
 
 =item B<--list>
 
-Output format for cpanm (or other command)
+Output format for cpanm (or other command).
+This option only works with B<--file> option.
 
 =item B<--help>
 
@@ -78,11 +106,10 @@ brief help message
 
 print version
 
+=head1 LIMITATION
+
+The performance of this module depends on L<Module::Extract::Use>.
+
 =back
-
-=head1 DESCRIPTION
-
-B<This program> will read the given input file(s) and do something
-useful with the contents thereof.
 
 =cut
